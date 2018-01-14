@@ -11,7 +11,8 @@ renderer.setSize(width, height);
 document.body.appendChild(renderer.domElement);
 
 const mapControls = new MapControls(camera, renderer.domElement, {
-    "radius": 6371
+    "radius": 6371,
+    "coord": [0.5, 0.8]
 });
 
 const mesh = new THREE.Mesh(
@@ -25,6 +26,13 @@ new THREE.TextureLoader().load('img/earth4.jpg', function (t) {
     mesh.material.map = t;
     scene.add(mesh);
 });
+
+function jump() {
+    mapControls.jumpTo({
+        "coord": [0, 0],
+        "bearing": 0.5
+    });
+}
 
 renderer.render(scene, camera);
 

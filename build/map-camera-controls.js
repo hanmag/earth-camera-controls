@@ -10,6 +10,8 @@
 
 	    var PI = 3.141592653589793;
 	    var HALFPI = PI / 2;
+	    var PI2 = PI * 2;
+
 	    var _this = this;
 	    var STATE = {
 	        NONE: -1,
@@ -43,15 +45,15 @@
 
 	    this.dynamicDampingFactor = 0.2;
 
-	    this.coord = new THREE.Vector2(0, HALFPI);
-	    this.zoom = 10;
-	    this.pitch = 0;
-	    this.bearing = 0;
+	    this.coord = (options.coord !== undefined) ? new THREE.Vector2(options.coord[0], options.coord[1]) : new THREE.Vector2(0, HALFPI);
+	    this.zoom = (options.zoom !== undefined) ? options.zoom : 10;
+	    this.pitch = (options.pitch !== undefined) ? options.pitch : 0;
+	    this.bearing = (options.bearing !== undefined) ? options.bearing : 0;
 
-	    this.coordEnd = new THREE.Vector2(0, HALFPI);
-	    this.zoomEnd = 10;
-	    this.pitchEnd = 0;
-	    this.bearingEnd = 0;
+	    this.coordEnd = this.coord.clone();
+	    this.zoomEnd = this.zoom;
+	    this.pitchEnd = this.pitch;
+	    this.bearingEnd = this.bearing;
 
 	    this.minZoom = 1;
 	    this.maxZoom = 18;
@@ -75,6 +77,13 @@
 
 
 	    // methods
+
+	    this.jumpTo = function (cameraOpts) {
+	        this.coordEnd = (cameraOpts.coord !== undefined) ? new THREE.Vector2(cameraOpts.coord[0], cameraOpts.coord[1]) : _this.coordEnd;
+	        this.zoomEnd = (cameraOpts.zoom !== undefined) ? cameraOpts.zoom : _this.zoomEnd;
+	        this.pitchEnd = (cameraOpts.pitch !== undefined) ? cameraOpts.pitch : _this.pitchEnd;
+	        this.bearingEnd = (cameraOpts.bearing !== undefined) ? cameraOpts.bearing : _this.bearingEnd;
+	    };
 
 	    this.handleResize = function () {
 
@@ -137,7 +146,7 @@
 
 	    // listeners
 
-	    function mousedown(event) {
+	    var mousedown = function (event) {
 
 	        if (_this.enabled === false) return;
 
@@ -164,9 +173,9 @@
 
 	        _this.dispatchEvent(startEvent);
 
-	    }
+	    };
 
-	    function mousemove(event) {
+	    var mousemove = function (event) {
 
 	        if (_this.enabled === false) return;
 
@@ -191,7 +200,6 @@
 
 	        } else if (_state === STATE.PAN && !_this.noPan) {
 
-	            console.log(_dragDelta);
 	            if ((Math.abs(_dragDelta.y) > 0.01 && Math.abs(_dragDelta.x) > 0.01) || Math.abs(_dragDelta.y) < 0.01) {
 	                if (_dragCurr.y < 0.5)
 	                    _this.bearingEnd = _this.bearing + (_dragDelta.x * _this.panSpeed * 24);
@@ -204,9 +212,9 @@
 
 	        }
 
-	    }
+	    };
 
-	    function mouseup(event) {
+	    var mouseup = function (event) {
 
 	        if (_this.enabled === false) return;
 
@@ -219,9 +227,9 @@
 	        document.removeEventListener('mouseup', mouseup);
 	        _this.dispatchEvent(endEvent);
 
-	    }
+	    };
 
-	    function mousewheel(event) {
+	    var mousewheel = function (event) {
 
 	        if (_this.enabled === false) return;
 
@@ -251,15 +259,15 @@
 
 	        _this.dispatchEvent(endEvent);
 
-	    }
+	    };
 
-	    function contextmenu(event) {
+	    var contextmenu = function (event) {
 
 	        if (_this.enabled === false) return;
 
 	        event.preventDefault();
 
-	    }
+	    };
 
 	    this.dispose = function () {
 
@@ -299,9 +307,10 @@
 
 	            _this.needsUpdate = true;
 	        } else {
+	            _this.coordEnd.x = (_this.coordEnd.x + PI2) % PI2;
 	            _this.coord.copy(_this.coordEnd);
 	            _this.zoom = _this.zoomEnd;
-	            _this.bearing = _this.bearingEnd;
+	            _this.bearing = _this.bearingEnd = (_this.bearingEnd + PI2) % PI2;
 	            _this.pitch = _this.pitchEnd;
 	        }
 

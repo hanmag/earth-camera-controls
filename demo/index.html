@@ -27,20 +27,7 @@
 
 <body>
     <div class="info">
-        <button onclick="cameraControls.rotate(  45 * THREE.Math.DEG2RAD, 0, true )">rotate theta 45deg</button>
-        <button onclick="cameraControls.rotate( -90 * THREE.Math.DEG2RAD, 0, true )">rotate theta -90deg</button>
-        <button onclick="cameraControls.rotate( 360 * THREE.Math.DEG2RAD, 0, true )">rotate theta 360deg</button>
-        <button onclick="cameraControls.rotate( 0, 20 * THREE.Math.DEG2RAD, true )">rotate phi 20deg</button>
-        <br>
-        <button onclick="cameraControls.pan(  1,  0, true)">pan( 1, 0 )</button>
-        <button onclick="cameraControls.pan(  0,  1, true)">pan( 0, 1 )</button>
-        <button onclick="cameraControls.pan( -1, -1, true )">pan( -1, -1 )</button>
-        <br>
-        <button onclick="cameraControls.dolly(  1, true )">dolly 1</button>
-        <button onclick="cameraControls.dolly( -1, true )">dolly -1</button>
-        <br>
-        <button onclick="cameraControls.moveTo( 3, 5, 2, true )">move to( 3, 5, 2 )</button>
-        <button onclick="cameraControls.reset( true )">reset</button>
+        <button onclick="jump()">jump</button>
     </div>
 
     <script src="http://localhost/maptalks.visual/lib/three.min.js"></script>
