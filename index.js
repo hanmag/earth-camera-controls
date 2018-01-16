@@ -16,8 +16,6 @@ var MapControls = MapControls = function (object, domElement, options) {
 
     this.object = object;
     this.domElement = (domElement !== undefined) ? domElement : document;
-    validateOptions(options);
-    this.mapRadius = (options !== undefined) ? options.radius : 6371;
 
     // API
 
@@ -40,6 +38,8 @@ var MapControls = MapControls = function (object, domElement, options) {
 
     this.dynamicDampingFactor = 0.2;
 
+    validateOptions(options);
+    this.mapRadius = (options !== undefined) ? options.radius : 6371;
     this.coord = (options.coord !== undefined) ? new THREE.Vector2(options.coord[0], options.coord[1]) : new THREE.Vector2(0, HALFPI);
     this.zoom = (options.zoom !== undefined) ? options.zoom : 10;
     this.pitch = (options.pitch !== undefined) ? options.pitch : 0;
@@ -66,15 +66,19 @@ var MapControls = MapControls = function (object, domElement, options) {
     var changeEvent = {
         type: 'change'
     };
-    var startEvent = {
-        type: 'start'
-    };
-    var endEvent = {
-        type: 'end'
-    };
-
 
     // methods
+
+    var dispatchEvent = function (type) {
+        if (type === 'end' && !changeEvent.type)
+            return;
+
+        changeEvent.type = type;
+        _this.dispatchEvent(changeEvent);
+
+        if (type === 'end')
+            changeEvent.type = null;
+    };
 
     var validateOptions = function () {};
 
@@ -172,8 +176,6 @@ var MapControls = MapControls = function (object, domElement, options) {
         document.addEventListener('mousemove', mousemove, false);
         document.addEventListener('mouseup', mouseup, false);
 
-        _this.dispatchEvent(startEvent);
-
     };
 
     var mousemove = function (event) {
@@ -226,7 +228,6 @@ var MapControls = MapControls = function (object, domElement, options) {
 
         document.removeEventListener('mousemove', mousemove);
         document.removeEventListener('mouseup', mouseup);
-        _this.dispatchEvent(endEvent);
 
     };
 
@@ -236,8 +237,6 @@ var MapControls = MapControls = function (object, domElement, options) {
 
         event.preventDefault();
         event.stopPropagation();
-
-        _this.dispatchEvent(startEvent);
 
         switch (event.deltaMode) {
 
@@ -257,8 +256,6 @@ var MapControls = MapControls = function (object, domElement, options) {
                 break;
 
         }
-
-        _this.dispatchEvent(endEvent);
 
     };
 
@@ -315,7 +312,10 @@ var MapControls = MapControls = function (object, domElement, options) {
             _this.pitch = _this.pitchEnd;
         }
 
-        if (!_this.needsUpdate) return;
+        if (!_this.needsUpdate) {
+            dispatchEvent('end');
+            return;
+        }
 
         var target = new THREE.Spherical(_this.mapRadius, _this.coord.y, _this.coord.x);
         target.makeSafe();
@@ -333,6 +333,7 @@ var MapControls = MapControls = function (object, domElement, options) {
 
         _this.object.lookAt(targetPos);
 
+        dispatchEvent('change');
         _this.needsUpdate = false;
     };
 

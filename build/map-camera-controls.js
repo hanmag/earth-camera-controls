@@ -22,7 +22,6 @@
 
 	    this.object = object;
 	    this.domElement = (domElement !== undefined) ? domElement : document;
-	    this.mapRadius = (options !== undefined) ? options.radius : 6371;
 
 	    // API
 
@@ -45,6 +44,7 @@
 
 	    this.dynamicDampingFactor = 0.2;
 
+	    this.mapRadius = (options !== undefined) ? options.radius : 6371;
 	    this.coord = (options.coord !== undefined) ? new THREE.Vector2(options.coord[0], options.coord[1]) : new THREE.Vector2(0, HALFPI);
 	    this.zoom = (options.zoom !== undefined) ? options.zoom : 10;
 	    this.pitch = (options.pitch !== undefined) ? options.pitch : 0;
@@ -68,15 +68,22 @@
 
 	    // events
 
-	    var startEvent = {
-	        type: 'start'
+	    var changeEvent = {
+	        type: 'change'
 	    };
-	    var endEvent = {
-	        type: 'end'
-	    };
-
 
 	    // methods
+
+	    var dispatchEvent = function (type) {
+	        if (type === 'end' && !changeEvent.type)
+	            return;
+
+	        changeEvent.type = type;
+	        _this.dispatchEvent(changeEvent);
+
+	        if (type === 'end')
+	            changeEvent.type = null;
+	    };
 
 	    this.jumpTo = function (cameraOpts) {
 	        this.coordEnd = (cameraOpts.coord !== undefined) ? new THREE.Vector2(cameraOpts.coord[0], cameraOpts.coord[1]) : _this.coordEnd;
@@ -171,8 +178,6 @@
 	        document.addEventListener('mousemove', mousemove, false);
 	        document.addEventListener('mouseup', mouseup, false);
 
-	        _this.dispatchEvent(startEvent);
-
 	    };
 
 	    var mousemove = function (event) {
@@ -225,7 +230,6 @@
 
 	        document.removeEventListener('mousemove', mousemove);
 	        document.removeEventListener('mouseup', mouseup);
-	        _this.dispatchEvent(endEvent);
 
 	    };
 
@@ -235,8 +239,6 @@
 
 	        event.preventDefault();
 	        event.stopPropagation();
-
-	        _this.dispatchEvent(startEvent);
 
 	        switch (event.deltaMode) {
 
@@ -256,8 +258,6 @@
 	                break;
 
 	        }
-
-	        _this.dispatchEvent(endEvent);
 
 	    };
 
@@ -314,7 +314,10 @@
 	            _this.pitch = _this.pitchEnd;
 	        }
 
-	        if (!_this.needsUpdate) return;
+	        if (!_this.needsUpdate) {
+	            dispatchEvent('end');
+	            return;
+	        }
 
 	        var target = new THREE.Spherical(_this.mapRadius, _this.coord.y, _this.coord.x);
 	        target.makeSafe();
@@ -332,6 +335,7 @@
 
 	        _this.object.lookAt(targetPos);
 
+	        dispatchEvent('change');
 	        _this.needsUpdate = false;
 	    };
 
