@@ -6,7 +6,7 @@
   "scripts": {
     "watch": "rollup -c -w",
     "build": "rollup -c",
-    "build-uglify": "rollup -c && uglifyjs build/map-camera-controls.js -cm --preamble > build/map-camera-controls.min.js",
+    "prepublish": "rollup -c && uglifyjs build/map-camera-controls.js -cm --preamble > build/map-camera-controls.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
