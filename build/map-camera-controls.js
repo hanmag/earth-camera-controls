@@ -55,6 +55,7 @@
 
 	    this.minZoom = 1;
 	    this.maxZoom = 18;
+	    this.globeZoom = 10;
 	    this.maxPitch = 80;
 
 	    var EPS = 0.000001;
@@ -210,13 +211,21 @@
 
 	            _this.zoomEnd = THREE.Math.clamp(_this.zoom + (_dragDelta.y * _this.zoomSpeed * 32), _this.minZoom, _this.maxZoom);
 
+	            if (_this.zoomEnd > _this.globeZoom) {
+	                _this.bearingEnd = 0;
+	            }
+
 	        } else if (_state === STATE.PAN && !_this.noPan) {
 
-	            if ((Math.abs(_dragDelta.y) > 0.015 && Math.abs(_dragDelta.x) > 0.015) || Math.abs(_dragDelta.y) < 0.015) {
-	                if (_dragCurr.y < 0.5)
-	                    _this.bearingEnd = _this.bearing + (_dragDelta.x * _this.panSpeed * 24);
-	                else
-	                    _this.bearingEnd = _this.bearing - (_dragDelta.x * _this.panSpeed * 24);
+	            if (_this.zoom < _this.globeZoom) {
+	                if ((Math.abs(_dragDelta.y) > 0.015 && Math.abs(_dragDelta.x) > 0.015) || Math.abs(_dragDelta.y) < 0.015) {
+	                    if (_dragCurr.y < 0.5)
+	                        _this.bearingEnd = _this.bearing + (_dragDelta.x * _this.panSpeed * 24);
+	                    else
+	                        _this.bearingEnd = _this.bearing - (_dragDelta.x * _this.panSpeed * 24);
+	                }
+	            } else {
+	                _this.bearingEnd = 0;
 	            }
 
 	            if ((Math.abs(_dragDelta.y) > 0.015 && Math.abs(_dragDelta.x) > 0.015) || Math.abs(_dragDelta.x) < 0.015)
@@ -264,6 +273,10 @@
 	                _this.zoomEnd = THREE.Math.clamp(_this.zoom + (event.deltaY * 0.00025 * _this.zoomSpeed * 32), _this.minZoom, _this.maxZoom);
 	                break;
 
+	        }
+
+	        if (_this.zoomEnd > _this.globeZoom) {
+	            _this.bearingEnd = 0;
 	        }
 
 	    };
