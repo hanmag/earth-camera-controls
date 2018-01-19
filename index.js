@@ -1,4 +1,4 @@
-var THREE = window.THREE || require('three');
+import * as THREE from 'three';
 
 var MapControls = MapControls = function (object, domElement, options) {
 
@@ -39,7 +39,7 @@ var MapControls = MapControls = function (object, domElement, options) {
     this.dynamicDampingFactor = 0.2;
 
     validateOptions(options);
-    this.mapRadius = (options !== undefined) ? options.radius : 6371;
+    this.earthRadius = (options !== undefined) ? options.radius : 6371;
     this.coord = (options.coord !== undefined) ? new THREE.Vector2(options.coord[0], options.coord[1]) : new THREE.Vector2(0, HALFPI);
     this.zoom = (options.zoom !== undefined) ? options.zoom : 10;
     this.pitch = (options.pitch !== undefined) ? options.pitch : 0;
@@ -141,7 +141,7 @@ var MapControls = MapControls = function (object, domElement, options) {
     };
 
     var getEyeVector = function (target) {
-        var zoomDistance = Math.pow(2, _this.zoom - 1) * _this.mapRadius / 100000;
+        var zoomDistance = Math.pow(2, _this.zoom - 1) * _this.earthRadius / 100000;
         var origin = new THREE.Vector3().setFromSpherical(target);
         target.phi -= 0.00001;
         var normal = new THREE.Vector3().setFromSpherical(target).sub(origin).normalize();
@@ -326,7 +326,7 @@ var MapControls = MapControls = function (object, domElement, options) {
             return;
         }
 
-        var target = new THREE.Spherical(_this.mapRadius, _this.coord.y, _this.coord.x);
+        var target = new THREE.Spherical(_this.earthRadius, _this.coord.y, _this.coord.x);
         target.makeSafe();
         var targetPos = new THREE.Vector3().setFromSpherical(target);
 
