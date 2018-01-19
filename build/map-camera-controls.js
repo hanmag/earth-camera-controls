@@ -85,6 +85,11 @@
 	            changeEvent.type = null;
 	    };
 
+	    this.getVisibleExtent = function () {
+	        var theta = (this.zoom * this.zoom) * Math.min(90 / (90 - this.pitch), 1.5) / 180;
+	        return theta;
+	    };
+
 	    this.jumpTo = function (cameraOpts) {
 	        this.coordEnd = (cameraOpts.coord !== undefined) ? new THREE.Vector2(cameraOpts.coord[0], cameraOpts.coord[1]) : _this.coordEnd;
 	        this.zoomEnd = (cameraOpts.zoom !== undefined) ? cameraOpts.zoom : _this.zoomEnd;
@@ -195,6 +200,10 @@
 
 	        if (_state === STATE.ROTATE && !_this.noRotate) {
 
+	            if (Math.abs(_dragDelta.y) < 0.01 && Math.abs(_dragDelta.x) > 0.01)
+	                _dragDelta.y = 0;
+	            if (Math.abs(_dragDelta.x) < 0.01 && Math.abs(_dragDelta.y) > 0.01)
+	                _dragDelta.x = 0;
 	            var offset = getRotateOffset(_dragDelta);
 	            _this.coordEnd.x = _this.coord.x - offset.x;
 	            _this.coordEnd.y = THREE.Math.clamp(_this.coord.y - offset.y, 0, PI);
@@ -205,14 +214,14 @@
 
 	        } else if (_state === STATE.PAN && !_this.noPan) {
 
-	            if ((Math.abs(_dragDelta.y) > 0.01 && Math.abs(_dragDelta.x) > 0.01) || Math.abs(_dragDelta.y) < 0.01) {
+	            if ((Math.abs(_dragDelta.y) > 0.015 && Math.abs(_dragDelta.x) > 0.015) || Math.abs(_dragDelta.y) < 0.015) {
 	                if (_dragCurr.y < 0.5)
 	                    _this.bearingEnd = _this.bearing + (_dragDelta.x * _this.panSpeed * 24);
 	                else
 	                    _this.bearingEnd = _this.bearing - (_dragDelta.x * _this.panSpeed * 24);
 	            }
 
-	            if ((Math.abs(_dragDelta.y) > 0.01 && Math.abs(_dragDelta.x) > 0.01) || Math.abs(_dragDelta.x) < 0.01)
+	            if ((Math.abs(_dragDelta.y) > 0.015 && Math.abs(_dragDelta.x) > 0.015) || Math.abs(_dragDelta.x) < 0.015)
 	                _this.pitchEnd = THREE.Math.clamp(_this.pitch - (_dragDelta.y * _this.panSpeed * 320), 0, _this.maxPitch);
 
 	        }
