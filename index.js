@@ -84,7 +84,7 @@ var MapControls = MapControls = function (object, domElement, options) {
     };
 
     this.getVisibleExtent = function () {
-        var theta = (this.zoom * this.zoom) * Math.min(90 / (90 - this.pitch), 1.5) / 180;
+        var theta = Math.pow(1.8, this.zoom) * Math.min(90 / (90 - this.pitch), 1.5) / 20000;
         return theta;
     };
 
