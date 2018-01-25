@@ -83,11 +83,6 @@ var MapControls = MapControls = function (object, domElement, options) {
             changeEvent.type = null;
     };
 
-    this.getVisibleExtent = function () {
-        var theta = Math.pow(1.8, this.zoom) * Math.min(90 / (90 - this.pitch), 1.5) / 20000;
-        return theta;
-    };
-
     this.jumpTo = function (cameraOpts) {
         validateOptions(cameraOpts);
         this.coordEnd = (cameraOpts.coord !== undefined) ? new THREE.Vector2(cameraOpts.coord[0], cameraOpts.coord[1]) : _this.coordEnd;
