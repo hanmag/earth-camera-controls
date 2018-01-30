@@ -17,10 +17,16 @@
         .info {
             color: #FFF;
             position: absolute;
+            top: 2px;
+            left: 2px;
         }
 
         a {
             color: inherit;
+        }
+
+        p {
+            color: white;
         }
     </style>
 </head>
@@ -28,6 +34,22 @@
 <body>
     <div class="info">
         <button onclick="jump()">jump</button>
+        <p>
+            <span>zoom: </span>
+            <span id="zoom"></span>
+        </p>
+        <p>
+            <span>coordinate: </span>
+            <span id="coordinate"></span>
+        </p>
+        <p>
+            <span>pitch: </span>
+            <span id="pitch"></span>
+        </p>
+        <p>
+            <span>bearing: </span>
+            <span id="bearing"></span>
+        </p>
     </div>
 
     <script src="http://localhost/maptalks.visual/lib/three.min.js"></script>

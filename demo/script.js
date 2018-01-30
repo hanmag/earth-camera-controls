@@ -15,6 +15,17 @@ const mapControls = new MapControls(camera, renderer.domElement, {
     "coord": [0.5, 0.8]
 });
 
+var update = function () {
+    document.getElementById('coordinate').innerText = mapControls.coord['x'].toFixed(4) + ', ' + mapControls.coord['y'].toFixed(4);
+    document.getElementById('zoom').innerText = mapControls.zoom.toFixed(4);
+    document.getElementById('pitch').innerText = mapControls.pitch.toFixed(4);
+    document.getElementById('bearing').innerText = mapControls.bearing.toFixed(4);
+};
+
+mapControls.globeZoom = 20;
+mapControls.addEventListener('change', update);
+mapControls.addEventListener('end', update);
+
 const mesh = new THREE.Mesh(
     new THREE.SphereGeometry(6371, 512, 512),
     new THREE.MeshPhongMaterial({
