@@ -59,6 +59,7 @@
 	    this.maxPitch = 80;
 
 	    var EPS = 0.000001;
+	    var PITCHEPS = 0.0001;
 
 	    var _state = STATE.NONE,
 	        _dragPrev = new THREE.Vector2(),
@@ -82,11 +83,6 @@
 
 	        if (type === 'end')
 	            changeEvent.type = null;
-	    };
-
-	    this.getVisibleExtent = function () {
-	        var theta = (this.zoom * this.zoom) * Math.min(90 / (90 - this.pitch), 1.5) / 180;
-	        return theta;
 	    };
 
 	    this.jumpTo = function (cameraOpts) {
@@ -142,19 +138,16 @@
 	    };
 
 	    var getEyeVector = function (target) {
-	        var zoomDistance = Math.pow(2, _this.zoom - 1) * _this.earthRadius / 100000;
+	        var zoomDistance = Math.pow(1.9, _this.zoom - 1) * _this.earthRadius / 30000;
 	        var origin = new THREE.Vector3().setFromSpherical(target);
-	        target.phi -= 0.00001;
+	        target.phi -= EPS;
 	        var normal = new THREE.Vector3().setFromSpherical(target).sub(origin).normalize();
 	        normal.applyAxisAngle(origin.clone().normalize(), _this.bearing + PI);
-	        if (_this.pitch > 0.1) {
-	            var eye0 = origin.normalize().multiplyScalar(Math.tan((90 - _this.pitch) / 180 * PI));
-	            return eye0.clone().add(normal).normalize().multiplyScalar(zoomDistance);
-	        } else {
-	            return origin.clone().normalize().multiplyScalar(zoomDistance);
-	        }
+	        if (_this.pitch < PITCHEPS)
+	            _this.pitch = PITCHEPS;
+	        var eye0 = origin.normalize().multiplyScalar(Math.tan((90 - _this.pitch) / 180 * PI));
+	        return eye0.clone().add(normal).normalize().multiplyScalar(zoomDistance);
 	    };
-
 	    // listeners
 
 	    var mousedown = function (event) {
@@ -218,7 +211,8 @@
 	        } else if (_state === STATE.PAN && !_this.noPan) {
 
 	            if (_this.zoom < _this.globeZoom) {
-	                if ((Math.abs(_dragDelta.y) > 0.015 && Math.abs(_dragDelta.x) > 0.015) || Math.abs(_dragDelta.y) < 0.015) {
+	                if ((Math.abs(_dragDelta.y) > 0.05 && Math.abs(_dragDelta.x) > 0.05) ||
+	                    (Math.abs(_dragDelta.y) < Math.abs(_dragDelta.x))) {
 	                    if (_dragCurr.y < 0.5)
 	                        _this.bearingEnd = _this.bearing + (_dragDelta.x * _this.panSpeed * 24);
 	                    else
@@ -228,7 +222,8 @@
 	                _this.bearingEnd = 0;
 	            }
 
-	            if ((Math.abs(_dragDelta.y) > 0.015 && Math.abs(_dragDelta.x) > 0.015) || Math.abs(_dragDelta.x) < 0.015)
+	            if ((Math.abs(_dragDelta.y) > 0.05 && Math.abs(_dragDelta.x) > 0.05) ||
+	                (Math.abs(_dragDelta.x) < Math.abs(_dragDelta.y)))
 	                _this.pitchEnd = THREE.Math.clamp(_this.pitch - (_dragDelta.y * _this.panSpeed * 320), 0, _this.maxPitch);
 
 	        }
@@ -327,10 +322,12 @@
 
 	            _this.needsUpdate = true;
 	        } else {
-	            _this.coordEnd.x = (_this.coordEnd.x + PI2) % PI2;
+	            while (_this.coordEnd.x < 0) _this.coordEnd.x += PI2;
+	            _this.coordEnd.x = _this.coordEnd.x % PI2;
 	            _this.coord.copy(_this.coordEnd);
 	            _this.zoom = _this.zoomEnd;
-	            _this.bearing = _this.bearingEnd = (_this.bearingEnd + PI2) % PI2;
+	            while (_this.bearingEnd < 0) _this.bearingEnd += PI2;
+	            _this.bearing = _this.bearingEnd = _this.bearingEnd % PI2;
 	            _this.pitch = _this.pitchEnd;
 	        }
 
@@ -346,12 +343,10 @@
 	        var eye = getEyeVector(target);
 	        _this.object.position.copy(targetPos.clone().add(eye));
 
-	        if (_this.pitch > 0.1) {
-	            var targetUp = targetPos.clone().normalize().multiplyScalar(eye.length() / Math.cos(_this.pitch / 180 * PI));
-	            _this.object.up = targetUp.sub(eye).normalize();
-	        } else {
-	            _this.object.up = new THREE.Vector3(Math.cos(HALFPI + _this.bearing), Math.sin(HALFPI + _this.bearing), 0);
-	        }
+	        if (_this.pitch < PITCHEPS)
+	            _this.pitch = PITCHEPS;
+	        var targetUp = targetPos.clone().normalize().multiplyScalar(eye.length() / Math.cos(_this.pitch / 180 * PI));
+	        _this.object.up = targetUp.sub(eye).normalize();
 
 	        _this.object.lookAt(targetPos);
 
