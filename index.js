@@ -55,8 +55,8 @@ var MapControls = MapControls = function (object, domElement, options) {
     this.globeZoom = 10;
     this.maxPitch = 80;
 
-    var EPS = 0.000001;
-    var PITCHEPS = 0.0001;
+    var EPS = 0.00001;
+    var PITCHEPS = 0.000001;
 
     var _state = STATE.NONE,
         _dragPrev = new THREE.Vector2(),
