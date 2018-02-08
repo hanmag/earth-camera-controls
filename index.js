@@ -55,7 +55,7 @@ var MapControls = MapControls = function (object, domElement, options) {
     this.globeZoom = 10;
     this.maxPitch = 80;
 
-    var EPS = 0.00001;
+    var EPS = 0.000001;
     var PITCHEPS = 0.000001;
 
     var _state = STATE.NONE,
@@ -192,9 +192,9 @@ var MapControls = MapControls = function (object, domElement, options) {
 
         if (_state === STATE.ROTATE && !_this.noRotate) {
 
-            if (Math.abs(_dragDelta.y) < 0.01 && Math.abs(_dragDelta.x) > 0.01)
+            if (Math.abs(_dragDelta.y) < 0.01 && Math.abs(_dragDelta.x) > 0.02)
                 _dragDelta.y = 0;
-            if (Math.abs(_dragDelta.x) < 0.01 && Math.abs(_dragDelta.y) > 0.01)
+            if (Math.abs(_dragDelta.x) < 0.01 && Math.abs(_dragDelta.y) > 0.02)
                 _dragDelta.x = 0;
             var offset = getRotateOffset(_dragDelta);
             _this.coordEnd.x = _this.coord.x - offset.x;
