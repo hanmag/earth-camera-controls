@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-var MapControls = MapControls = function (object, domElement, options) {
+var EarthControls = EarthControls = function (object, domElement, options) {
 
     var PI = 3.141592653589793;
     var HALFPI = PI / 2;
@@ -359,6 +359,6 @@ var MapControls = MapControls = function (object, domElement, options) {
     this.update();
 };
 
-MapControls.prototype = Object.create(THREE.EventDispatcher.prototype);
+EarthControls.prototype = Object.create(THREE.EventDispatcher.prototype);
 
-export default MapControls;
+export default EarthControls;

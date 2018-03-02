@@ -10,21 +10,21 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(width, height);
 document.body.appendChild(renderer.domElement);
 
-const mapControls = new MapControls(camera, renderer.domElement, {
+const earthControls = new EarthControls(camera, renderer.domElement, {
     "radius": 6371,
     "coord": [0.5, 0.8]
 });
 
 var update = function () {
-    document.getElementById('coordinate').innerText = mapControls.coord['x'].toFixed(4) + ', ' + mapControls.coord['y'].toFixed(4);
-    document.getElementById('zoom').innerText = mapControls.zoom.toFixed(4);
-    document.getElementById('pitch').innerText = mapControls.pitch.toFixed(4);
-    document.getElementById('bearing').innerText = mapControls.bearing.toFixed(4);
+    document.getElementById('coordinate').innerText = earthControls.coord['x'].toFixed(4) + ', ' + earthControls.coord['y'].toFixed(4);
+    document.getElementById('zoom').innerText = earthControls.zoom.toFixed(4);
+    document.getElementById('pitch').innerText = earthControls.pitch.toFixed(4);
+    document.getElementById('bearing').innerText = earthControls.bearing.toFixed(4);
 };
 
-mapControls.globeZoom = 20;
-mapControls.addEventListener('change', update);
-mapControls.addEventListener('end', update);
+earthControls.globeZoom = 20;
+earthControls.addEventListener('change', update);
+earthControls.addEventListener('end', update);
 
 const mesh = new THREE.Mesh(
     new THREE.SphereGeometry(6371, 512, 512),
@@ -39,7 +39,7 @@ new THREE.TextureLoader().load('img/earth4.jpg', function (t) {
 });
 
 function jump() {
-    mapControls.jumpTo({
+    earthControls.jumpTo({
         "coord": [0, 0],
         "bearing": 0.5
     });
@@ -49,7 +49,7 @@ renderer.render(scene, camera);
 
 (function anim() {
 
-    mapControls.update();
+    earthControls.update();
 
     requestAnimationFrame(anim);
 

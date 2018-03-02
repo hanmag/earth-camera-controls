@@ -1,36 +1,37 @@
 {
-  "name": "map-camera-controls",
+  "name": "earth-camera-controls",
   "version": "0.1.4",
   "description": "",
   "main": "index.js",
   "scripts": {
     "watch": "rollup -c -w",
     "build": "rollup -c",
-    "prepublish": "rollup -c && uglifyjs build/map-camera-controls.js -cm --preamble > build/map-camera-controls.min.js",
+    "prepublish": "rollup -c && uglifyjs build/earth-camera-controls.js -cm --preamble > build/earth-camera-controls.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
     "package.json",
     "LICENSE",
     "README.md",
-    "build/map-camera-controls.js",
-    "build/map-camera-controls.min.js"
+    "build/earth-camera-controls.js",
+    "build/earth-camera-controls.min.js"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hanmag/map-camera-controls.git"
+    "url": "git+https://github.com/hanmag/earth-camera-controls.git"
   },
   "keywords": [
     "three.js",
     "camera",
-    "map"
+    "earth",
+    "gis"
   ],
   "author": "Daemon",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hanmag/map-camera-controls/issues"
+    "url": "https://github.com/hanmag/earth-camera-controls/issues"
   },
-  "homepage": "https://github.com/hanmag/map-camera-controls#readme",
+  "homepage": "https://github.com/hanmag/earth-camera-controls#readme",
   "devDependencies": {
     "three": "^0.89.0",
     "rollup": "^0.51.8",

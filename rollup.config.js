@@ -8,7 +8,7 @@ export default {
     // sourceMap: true,
     output: [{
         format: 'umd',
-        name: 'MapControls',
-        file: 'build/map-camera-controls.js'
+        name: 'EarthControls',
+        file: 'build/earth-camera-controls.js'
     }]
 };

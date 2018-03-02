@@ -1,2 +1,2 @@
-# map-camera-controls
-A map camera control(like cesium) for three.js
+# earth-camera-controls
+A earth camera control(like cesium) for three.js

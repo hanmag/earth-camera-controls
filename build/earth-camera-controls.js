@@ -1,10 +1,10 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('three')) :
 	typeof define === 'function' && define.amd ? define(['three'], factory) :
-	(global.MapControls = factory(global.THREE));
+	(global.EarthControls = factory(global.THREE));
 }(this, (function (THREE) { 'use strict';
 
-	var MapControls = MapControls = function (object, domElement, options) {
+	var EarthControls = EarthControls = function (object, domElement, options) {
 
 	    var PI = 3.141592653589793;
 	    var HALFPI = PI / 2;
@@ -59,7 +59,7 @@
 	    this.maxPitch = 80;
 
 	    var EPS = 0.000001;
-	    var PITCHEPS = 0.0001;
+	    var PITCHEPS = 0.000001;
 
 	    var _state = STATE.NONE,
 	        _dragPrev = new THREE.Vector2(),
@@ -192,9 +192,9 @@
 
 	        if (_state === STATE.ROTATE && !_this.noRotate) {
 
-	            if (Math.abs(_dragDelta.y) < 0.01 && Math.abs(_dragDelta.x) > 0.01)
+	            if (Math.abs(_dragDelta.y) < 0.01 && Math.abs(_dragDelta.x) > 0.02)
 	                _dragDelta.y = 0;
-	            if (Math.abs(_dragDelta.x) < 0.01 && Math.abs(_dragDelta.y) > 0.01)
+	            if (Math.abs(_dragDelta.x) < 0.01 && Math.abs(_dragDelta.y) > 0.02)
 	                _dragDelta.x = 0;
 	            var offset = getRotateOffset(_dragDelta);
 	            _this.coordEnd.x = _this.coord.x - offset.x;
@@ -359,10 +359,10 @@
 	    this.update();
 	};
 
-	MapControls.prototype = Object.create(THREE.EventDispatcher.prototype);
+	EarthControls.prototype = Object.create(THREE.EventDispatcher.prototype);
 
-	var MapControls$1 = MapControls;
+	var EarthControls$1 = EarthControls;
 
-	return MapControls$1;
+	return EarthControls$1;
 
 })));
