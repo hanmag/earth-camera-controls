@@ -53,8 +53,8 @@
 	    this.pitchEnd = this.pitch;
 	    this.bearingEnd = this.bearing;
 
-	    this.minZoom = 1;
-	    this.maxZoom = 18;
+	    this.minZoom = (options.minZoom !== undefined) ? options.minZoom : 1;
+	    this.maxZoom = (options.maxZoom !== undefined) ? options.maxZoom : 18;
 	    this.globeZoom = 10;
 	    this.maxPitch = 80;
 
