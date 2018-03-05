@@ -50,8 +50,8 @@ var EarthControls = EarthControls = function (object, domElement, options) {
     this.pitchEnd = this.pitch;
     this.bearingEnd = this.bearing;
 
-    this.minZoom = 1;
-    this.maxZoom = 18;
+    this.minZoom = (options.minZoom !== undefined) ? options.minZoom : 1;
+    this.maxZoom = (options.maxZoom !== undefined) ? options.maxZoom : 18;
     this.globeZoom = 10;
     this.maxPitch = 80;
 
@@ -71,7 +71,9 @@ var EarthControls = EarthControls = function (object, domElement, options) {
 
     // methods
 
-    var validateOptions = function () {};
+    var validateOptions = function (options) {
+        options = options || {};
+    };
 
     var dispatchEvent = function (type) {
         if (type === 'end' && !changeEvent.type)
