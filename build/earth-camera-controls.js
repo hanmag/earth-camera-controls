@@ -42,7 +42,10 @@
 
 	    this.dynamicDampingFactor = 0.2;
 
-	    this.earthRadius = (options !== undefined) ? options.radius : 6371;
+	    options = (function (opt) {
+	        return opt || {};
+	    })(options);
+	    this.earthRadius = (options.radius !== undefined) ? options.radius : 6371;
 	    this.coord = (options.coord !== undefined) ? new THREE.Vector2(options.coord[0], options.coord[1]) : new THREE.Vector2(0, HALFPI);
 	    this.zoom = (options.zoom !== undefined) ? options.zoom : 10;
 	    this.pitch = (options.pitch !== undefined) ? options.pitch : 0;
@@ -86,6 +89,7 @@
 	    };
 
 	    this.jumpTo = function (cameraOpts) {
+	        validateOptions(cameraOpts);
 	        this.coordEnd = (cameraOpts.coord !== undefined) ? new THREE.Vector2(cameraOpts.coord[0], cameraOpts.coord[1]) : _this.coordEnd;
 	        this.zoomEnd = (cameraOpts.zoom !== undefined) ? cameraOpts.zoom : _this.zoomEnd;
 	        this.pitchEnd = (cameraOpts.pitch !== undefined) ? cameraOpts.pitch : _this.pitchEnd;

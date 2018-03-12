@@ -38,7 +38,9 @@ var EarthControls = EarthControls = function (object, domElement, options) {
 
     this.dynamicDampingFactor = 0.2;
 
-    options = validateOptions(options);
+    options = (function (opt) {
+        return opt || {};
+    })(options);
     this.earthRadius = (options.radius !== undefined) ? options.radius : 6371;
     this.coord = (options.coord !== undefined) ? new THREE.Vector2(options.coord[0], options.coord[1]) : new THREE.Vector2(0, HALFPI);
     this.zoom = (options.zoom !== undefined) ? options.zoom : 10;
@@ -70,10 +72,6 @@ var EarthControls = EarthControls = function (object, domElement, options) {
     };
 
     // methods
-
-    var validateOptions = function (options) {
-        return options || {};
-    };
 
     var dispatchEvent = function (type) {
         if (type === 'end' && !changeEvent.type)
