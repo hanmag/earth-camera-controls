@@ -138,7 +138,7 @@ var EarthControls = EarthControls = function (object, domElement, options) {
     };
 
     var getEyeVector = function (target) {
-        var zoomDistance = Math.pow(1.9, _this.zoom - 1) * _this.earthRadius / 30000;
+        var zoomDistance = Math.pow(1.71, _this.zoom - 1) * _this.earthRadius * 0.0001;
         var origin = new THREE.Vector3().setFromSpherical(target);
         target.phi -= EPS;
         var normal = new THREE.Vector3().setFromSpherical(target).sub(origin).normalize();
