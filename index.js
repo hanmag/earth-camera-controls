@@ -133,12 +133,12 @@ var EarthControls = EarthControls = function (object, domElement, options) {
     }());
 
     var getRotateOffset = function (delta) {
-        var speed = Math.pow(2, _this.zoom - 1) * _this.rotateSpeed * 0.0001;
+        var speed = Math.pow(1.834, _this.zoom) * _this.rotateSpeed * 0.00027;
         return delta.clone().rotateAround(new THREE.Vector2(0, 0), -_this.bearing).multiplyScalar(speed);
     };
 
     var getEyeVector = function (target) {
-        var zoomDistance = Math.pow(1.71, _this.zoom - 1) * _this.earthRadius * 0.0001;
+        var zoomDistance = Math.pow(1.745, _this.zoom) * _this.earthRadius * 0.000036;
         var origin = new THREE.Vector3().setFromSpherical(target);
         target.phi -= EPS;
         var normal = new THREE.Vector3().setFromSpherical(target).sub(origin).normalize();
